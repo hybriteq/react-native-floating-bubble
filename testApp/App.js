@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {Fragment, useEffect} from 'react';
+import React, { Fragment, useEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -15,6 +15,7 @@ import {
   Button,
   Text,
   StatusBar,
+  ToastAndroid,
   DeviceEventEmitter
 } from 'react-native';
 
@@ -26,20 +27,24 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import FloatingBubble, {getValue} from "react-native-floating-bubble"
+import { showFloatingBubble } from "react-native-floating-bubble"
+
+const showToast = text => ToastAndroid.show(text, 1000)
 
 const App = () => {
-
-  const onOpen = () => getValue().then(v => alert(JSON.stringify(v)))
-
+  const onAdd = () => showFloatingBubble().then(v => showToast("Add Floating Button"))
   useEffect(() => {
-    console.log("Init listener")
-    const subscription = DeviceEventEmitter.addListener("click-floating-bubble", function(e) {
-      // handle event
-      console.log("Press button")
+    const subscriptionPress = DeviceEventEmitter.addListener("floating-bubble-press", function (e) {
+      showToast("Press Bubble")
     });
-    return () => subscription.remove();
-  },[])
+    const subscriptionRemove = DeviceEventEmitter.addListener("floating-bubble-remove", function (e) {
+      showToast("Remove Bubble")
+    });
+    return () => {
+      subscriptionPress.remove();
+      subscriptionRemove.remove();
+    }
+  }, [])
   return (
     <Fragment>
       <StatusBar barStyle="dark-content" />
@@ -48,7 +53,7 @@ const App = () => {
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
           <Header />
-          <Button title="Open" onPress={onOpen}/>
+          <Button title="Add Bubble" onPress={onAdd} />
         </ScrollView>
       </SafeAreaView>
     </Fragment>

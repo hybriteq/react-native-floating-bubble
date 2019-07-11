@@ -13,7 +13,6 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
 
 import com.txusballesteros.bubbles.BubbleLayout;
 import com.txusballesteros.bubbles.BubblesManager;
@@ -41,7 +40,7 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod // Notates a method that should be exposed to React
-  public void getValue(final Promise promise) {
+  public void showFloatingBubble(final Promise promise) {
     try {
       this.addNewBubble();
       promise.resolve("");
@@ -55,14 +54,14 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
     bubbleView.setOnBubbleRemoveListener(new BubbleLayout.OnBubbleRemoveListener() {
       @Override
       public void onBubbleRemoved(BubbleLayout bubble) {
+        sendEvent("floating-bubble-remove");
       }
     });
     bubbleView.setOnBubbleClickListener(new BubbleLayout.OnBubbleClickListener() {
 
       @Override
       public void onBubbleClick(BubbleLayout bubble) {
-        Toast.makeText(reactContext, "Clicked !", Toast.LENGTH_SHORT).show();
-        sendEvent("click-floating-bubble");
+        sendEvent("floating-bubble-press");
       }
     });
     bubbleView.setShouldStickToWall(true);
