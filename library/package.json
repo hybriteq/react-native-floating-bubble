@@ -2,7 +2,7 @@
 {
   "name": "react-native-floating-bubble",
   "version": "1.0.0",
-  "description": "",
+  "description": "Floating bubbles for React Native",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,10 +11,9 @@
     "react-native"
   ],
   "author": "",
-  "license": "",
+  "license": "MIT",
   "peerDependencies": {
     "react-native": "^0.41.2",
     "react-native-windows": "0.41.0-rc.1"
-
   }
 }
