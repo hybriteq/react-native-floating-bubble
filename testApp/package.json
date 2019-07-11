@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "updateLib": "rm -rf node_modules/ && yarn --reset-cache && yarn start"
   },
   "dependencies": {
     "react": "16.8.6",
