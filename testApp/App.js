@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -15,6 +15,7 @@ import {
   Button,
   Text,
   StatusBar,
+  DeviceEventEmitter
 } from 'react-native';
 
 import {
@@ -31,6 +32,14 @@ const App = () => {
 
   const onOpen = () => getValue().then(v => alert(JSON.stringify(v)))
 
+  useEffect(() => {
+    console.log("Init listener")
+    const subscription = DeviceEventEmitter.addListener("click-floating-bubble", function(e) {
+      // handle event
+      console.log("Press button")
+    });
+    return () => subscription.remove();
+  },[])
   return (
     <Fragment>
       <StatusBar barStyle="dark-content" />

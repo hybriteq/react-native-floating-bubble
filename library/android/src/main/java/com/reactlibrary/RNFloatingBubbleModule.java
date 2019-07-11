@@ -6,6 +6,9 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,7 +28,11 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
     super(reactContext);
     this.reactContext = reactContext;
 
-    initializeBubblesManager();
+    try {
+      initializeBubblesManager();
+    } catch (Exception e) {
+
+    }
   }
 
   @Override
@@ -35,39 +42,48 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
 
   @ReactMethod // Notates a method that should be exposed to React
   public void getValue(final Promise promise) {
+    try {
       this.addNewBubble();
-    promise.resolve("A real native value");
+      promise.resolve("");
+    } catch (Exception e) {
+      promise.reject("");
+    }
   }
 
   private void addNewBubble() {
-        BubbleLayout bubbleView = (BubbleLayout)LayoutInflater.from(reactContext).inflate(R.layout.bubble_layout, null);
-        bubbleView.setOnBubbleRemoveListener(new BubbleLayout.OnBubbleRemoveListener() {
-            @Override
-            public void onBubbleRemoved(BubbleLayout bubble) { }
-        });
-        bubbleView.setOnBubbleClickListener(new BubbleLayout.OnBubbleClickListener() {
+    BubbleLayout bubbleView = (BubbleLayout) LayoutInflater.from(reactContext).inflate(R.layout.bubble_layout, null);
+    bubbleView.setOnBubbleRemoveListener(new BubbleLayout.OnBubbleRemoveListener() {
+      @Override
+      public void onBubbleRemoved(BubbleLayout bubble) {
+      }
+    });
+    bubbleView.setOnBubbleClickListener(new BubbleLayout.OnBubbleClickListener() {
 
-            @Override
-            public void onBubbleClick(BubbleLayout bubble) {
-                Toast.makeText(reactContext, "Clicked !",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-        bubbleView.setShouldStickToWall(true);
-        bubblesManager.addBubble(bubbleView, 60, 20);
-    }
+      @Override
+      public void onBubbleClick(BubbleLayout bubble) {
+        Toast.makeText(reactContext, "Clicked !", Toast.LENGTH_SHORT).show();
+        sendEvent("click-floating-bubble");
+      }
+    });
+    bubbleView.setShouldStickToWall(true);
+    bubblesManager.addBubble(bubbleView, 60, 20);
+  }
 
-    private void initializeBubblesManager() {
-        bubblesManager = new BubblesManager.Builder(reactContext)
-                .setTrashLayout(R.layout.bubble_trash_layout)
-                .setInitializationCallback(new OnInitializedCallback() {
-                    @Override
-                    public void onInitialized() {
-                        addNewBubble();
-                    }
-                })
-                .build();
-        bubblesManager.initialize();
-    }
+  private void initializeBubblesManager() {
+    bubblesManager = new BubblesManager.Builder(reactContext).setTrashLayout(R.layout.bubble_trash_layout)
+        .setInitializationCallback(new OnInitializedCallback() {
+          @Override
+          public void onInitialized() {
+            // addNewBubble();
+          }
+        }).build();
+    bubblesManager.initialize();
+  }
 
+  private void sendEvent(String eventName) {
+    WritableMap params = Arguments.createMap();
+    reactContext
+      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+      .emit(eventName, params);
+  }
 }
