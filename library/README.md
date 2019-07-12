@@ -70,3 +70,9 @@ Events: `floating-bubble-press`, `floating-bubble-remove`
   ### Change Bubble Icon
 
  Place the icon file as `android/app/src/main/res/drawable/bubble_icon.png` 
+ 
+
+ ## Contribute 
+
+ If you want to contribute the source code is here.
+  https://github.com/hybriteq/react-native-floating-bubble
