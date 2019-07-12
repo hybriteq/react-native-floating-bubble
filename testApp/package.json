@@ -23,5 +23,9 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hybriteq/react-native-floating-bubble.git"
   }
 }
