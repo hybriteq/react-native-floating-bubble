@@ -1,7 +1,15 @@
 
 # react-native-floating-bubble
 
-## Getting started
+
+A simple Facebook Chat Head like bubble for react native. Special thanks to [bubble-for-android](https://github.com/txusballesteros/bubbles-for-android) because this is just react native wrapper for that library. 
+
+![Preview](https://github.com/hybriteq/react-native-floating-bubble/raw/master/preview.gif)
+
+
+
+
+## Installation
 
 `$ npm install react-native-floating-bubble --save`
 
