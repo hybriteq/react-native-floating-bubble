@@ -13,6 +13,9 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.content.Intent;
+import android.provider.Settings;
+import android.net.Uri;
 
 import com.txusballesteros.bubbles.BubbleLayout;
 import com.txusballesteros.bubbles.BubblesManager;
@@ -22,6 +25,7 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
 
   private BubblesManager bubblesManager;
   private final ReactApplicationContext reactContext;
+  private BubbleLayout bubbleView;
 
   public RNFloatingBubbleModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -49,11 +53,31 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
     }
   }  
 
+  @ReactMethod // Notates a method that should be exposed to React
+  public void hideFloatingBubble(final Promise promise) {
+    try {
+      this.removeBubble();
+      promise.resolve("");
+    } catch (Exception e) {
+      promise.reject("");
+    }
+  }  
+  
+  @ReactMethod // Notates a method that should be exposed to React
+  public void requestPermission(final Promise promise) {
+    try {
+      this.requestPermissionAction(promise);
+    } catch (Exception e) {
+    }
+  }  
+
   private void addNewBubble() {
-    BubbleLayout bubbleView = (BubbleLayout) LayoutInflater.from(reactContext).inflate(R.layout.bubble_layout, null);
+    this.removeBubble();
+    bubbleView = (BubbleLayout) LayoutInflater.from(reactContext).inflate(R.layout.bubble_layout, null);
     bubbleView.setOnBubbleRemoveListener(new BubbleLayout.OnBubbleRemoveListener() {
       @Override
       public void onBubbleRemoved(BubbleLayout bubble) {
+        bubbleView = null;
         sendEvent("floating-bubble-remove");
       }
     });
@@ -66,6 +90,30 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
     });
     bubbleView.setShouldStickToWall(true);
     bubblesManager.addBubble(bubbleView, 60, 20);
+  }
+
+  private void removeBubble() {
+    if(bubbleView != null){
+      try{
+        bubblesManager.removeBubble(bubbleView);
+      } catch(Exception e){
+
+      }
+    }
+  }
+
+
+  public void requestPermissionAction(final Promise promise) {
+    if (!Settings.canDrawOverlays(reactContext)) {
+      Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + reactContext.getPackageName()));
+      Bundle bundle = new Bundle();
+      reactContext.startActivityForResult(intent, 0, bundle);
+    } 
+    if (Settings.canDrawOverlays(reactContext)) {
+      promise.resolve("");
+    } else {
+      promise.reject("");
+    }
   }
 
   private void initializeBubblesManager() {

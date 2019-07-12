@@ -27,12 +27,14 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { showFloatingBubble } from "react-native-floating-bubble"
+import { showFloatingBubble, hideFloatingBubble, requestPermission } from "react-native-floating-bubble"
 
 const showToast = text => ToastAndroid.show(text, 1000)
 
 const App = () => {
-  const onAdd = () => showFloatingBubble().then(v => showToast("Add Floating Button"))
+  const onAdd = () => showFloatingBubble().then(() => showToast("Add Floating Button"))
+  const onHide = () => hideFloatingBubble().then(() => showToast("Manually Removed Bubble")).catch(() => showToast("Failed to remove"))
+  const onRequestPermission = () => requestPermission().then(() => showToast("Permission received")).catch(() => showToast("Failed to get permission"))
   useEffect(() => {
     const subscriptionPress = DeviceEventEmitter.addListener("floating-bubble-press", function (e) {
       showToast("Press Bubble")
@@ -53,7 +55,9 @@ const App = () => {
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
           <Header />
-          <Button title="Add Bubble" onPress={onAdd} />
+          <Button style={styles.button} title="Add Bubble" onPress={onAdd} />
+          <Button style={styles.button}  title="Hide Bubble" onPress={onHide} />
+          <Button style={styles.button}  title="Get Permission" onPress={onRequestPermission} />
         </ScrollView>
       </SafeAreaView>
     </Fragment>
@@ -81,6 +85,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '400',
     color: Colors.dark,
+  },
+  button: {
+    margin: 30
   },
   highlight: {
     fontWeight: '700',
