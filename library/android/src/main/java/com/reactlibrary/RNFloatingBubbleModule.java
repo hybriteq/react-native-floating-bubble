@@ -47,7 +47,7 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
     } catch (Exception e) {
       promise.reject("");
     }
-  }
+  }  
 
   private void addNewBubble() {
     BubbleLayout bubbleView = (BubbleLayout) LayoutInflater.from(reactContext).inflate(R.layout.bubble_layout, null);
