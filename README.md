@@ -45,17 +45,26 @@ A simple Facebook Chat Head like bubble for react native. Special thanks to [bub
 ### Methods
 
 ```javascript
-import { showFloatingBubble, hideFloatingBubble, requestPermission } from "react-native-floating-bubble"
-
-// Show Floating Bubble
-showFloatingBubble().then(() => console.log("Floating Bubble Added"));
-
-// Hide Floatin Bubble
-hideFloatingBubble().then(() => console.log("Floating Bubble Removed"));
-
+import { showFloatingBubble, hideFloatingBubble, requestPermission, initialize } from "react-native-floating-bubble"
 
 // To display the bubble over other apps you need to get 'Draw Over Other Apps' permission from androind.
-requestPermission().then(() => console.log("Permission Granted")).catch(() => console.log("Permission is not granted"))
+// If you initialize without having the permission App could crash
+requestPermission()
+	.then(() => console.log("Permission Granted"))
+	.catch(() => console.log("Permission is not granted"))
+	
+// Initialize bubble manage
+initialize()
+	.then(() => console.log("Initialized the bubble mange"))
+
+
+// Show Floating Bubble: x=10, y=10 position of the bubble
+showFloatingBubble(10, 10)
+	.then(() => console.log("Floating Bubble Added"));
+
+// Hide Floatin Bubble
+hideFloatingBubble()
+	.then(() => console.log("Floating Bubble Removed"));
 ```
 ### Events
 

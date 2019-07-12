@@ -27,7 +27,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { showFloatingBubble, hideFloatingBubble, requestPermission } from "react-native-floating-bubble"
+import { showFloatingBubble, hideFloatingBubble, requestPermission, initialize } from "react-native-floating-bubble"
 
 const showToast = text => ToastAndroid.show(text, 1000)
 
@@ -35,6 +35,7 @@ const App = () => {
   const onAdd = () => showFloatingBubble().then(() => showToast("Add Floating Button"))
   const onHide = () => hideFloatingBubble().then(() => showToast("Manually Removed Bubble")).catch(() => showToast("Failed to remove"))
   const onRequestPermission = () => requestPermission().then(() => showToast("Permission received")).catch(() => showToast("Failed to get permission"))
+  const onInit = () => initialize()
   useEffect(() => {
     const subscriptionPress = DeviceEventEmitter.addListener("floating-bubble-press", function (e) {
       showToast("Press Bubble")
@@ -55,9 +56,16 @@ const App = () => {
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
           <Header />
-          <Button style={styles.button} title="Add Bubble" onPress={onAdd} />
-          <Button style={styles.button}  title="Hide Bubble" onPress={onHide} />
-          <Button style={styles.button}  title="Get Permission" onPress={onRequestPermission} />
+          <View style={{ padding: 30 }}>
+            <Text>Ger Permission</Text>
+            <Button style={styles.button} title="Get Permission" onPress={onRequestPermission} />
+            <Text>Initialize Bubble Manage</Text>
+            <Button style={styles.button} title="Initialize" onPress={onInit} />
+            <Text>Add the bubble</Text>
+            <Button style={styles.button} title="Add Bubble" onPress={onAdd} />
+            <Text>Remove the bubble</Text>
+            <Button style={styles.button} title="Hide Bubble" onPress={onHide} />
+          </View>
         </ScrollView>
       </SafeAreaView>
     </Fragment>

@@ -31,11 +31,11 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
     super(reactContext);
     this.reactContext = reactContext;
 
-    try {
-      initializeBubblesManager();
-    } catch (Exception e) {
+    // try {
+    //   initializeBubblesManager();
+    // } catch (Exception e) {
 
-    }
+    // }
   }
 
   @Override
@@ -44,9 +44,9 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod // Notates a method that should be exposed to React
-  public void showFloatingBubble(final Promise promise) {
+  public void showFloatingBubble(int x, int y, final Promise promise) {
     try {
-      this.addNewBubble();
+      this.addNewBubble(x, y);
       promise.resolve("");
     } catch (Exception e) {
       promise.reject("");
@@ -70,8 +70,16 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
     } catch (Exception e) {
     }
   }  
+  
+  @ReactMethod // Notates a method that should be exposed to React
+  public void initialize(final Promise promise) {
+    try {
+      this.initializeBubblesManager();
+    } catch (Exception e) {
+    }
+  }  
 
-  private void addNewBubble() {
+  private void addNewBubble(int x, int y) {
     this.removeBubble();
     bubbleView = (BubbleLayout) LayoutInflater.from(reactContext).inflate(R.layout.bubble_layout, null);
     bubbleView.setOnBubbleRemoveListener(new BubbleLayout.OnBubbleRemoveListener() {
@@ -89,7 +97,7 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
       }
     });
     bubbleView.setShouldStickToWall(true);
-    bubblesManager.addBubble(bubbleView, 60, 20);
+    bubblesManager.addBubble(bubbleView, x, y);
   }
 
   private void removeBubble() {
