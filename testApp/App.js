@@ -27,7 +27,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { showFloatingBubble, hideFloatingBubble, requestPermission, initialize } from "react-native-floating-bubble"
+import { showFloatingBubble, hideFloatingBubble, requestPermission, checkPermission, initialize } from "react-native-floating-bubble"
 
 const showToast = text => ToastAndroid.show(text, 1000)
 
@@ -35,7 +35,8 @@ const App = () => {
   const onAdd = () => showFloatingBubble().then(() => showToast("Add Floating Button"))
   const onHide = () => hideFloatingBubble().then(() => showToast("Manually Removed Bubble")).catch(() => showToast("Failed to remove"))
   const onRequestPermission = () => requestPermission().then(() => showToast("Permission received")).catch(() => showToast("Failed to get permission"))
-  const onInit = () => initialize()
+  const onCheckPermissoin = () => checkPermission().then((value) => showToast(`Permission: ${value ? 'Yes' : 'No'}`)).catch(() => showToast("Failed to check"))
+  const onInit = () => initialize().then(() => showToast("Init")).catch(() => showToast("Failed init"));
   useEffect(() => {
     const subscriptionPress = DeviceEventEmitter.addListener("floating-bubble-press", function (e) {
       showToast("Press Bubble")
@@ -57,6 +58,8 @@ const App = () => {
           style={styles.scrollView}>
           <Header />
           <View style={{ padding: 30 }}>
+            <Text>Check Permission</Text>
+            <Button style={styles.button} title="Check" onPress={onCheckPermissoin} />
             <Text>Ger Permission</Text>
             <Button style={styles.button} title="Get Permission" onPress={onRequestPermission} />
             <Text>Initialize Bubble Manage</Text>

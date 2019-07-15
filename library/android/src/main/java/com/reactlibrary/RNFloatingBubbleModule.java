@@ -72,10 +72,21 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
   }  
   
   @ReactMethod // Notates a method that should be exposed to React
+  public void checkPermission(final Promise promise) {
+    try {
+      promise.resolve(Settings.canDrawOverlays(reactContext));
+    } catch (Exception e) {
+      promise.reject("");
+    }
+  }  
+  
+  @ReactMethod // Notates a method that should be exposed to React
   public void initialize(final Promise promise) {
     try {
       this.initializeBubblesManager();
+      promise.resolve("");
     } catch (Exception e) {
+      promise.reject("");
     }
   }  
 
