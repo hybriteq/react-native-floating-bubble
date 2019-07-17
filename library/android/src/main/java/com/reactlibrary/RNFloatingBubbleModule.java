@@ -11,6 +11,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import android.os.Bundle;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.content.Intent;
@@ -74,7 +75,7 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
   @ReactMethod // Notates a method that should be exposed to React
   public void checkPermission(final Promise promise) {
     try {
-      promise.resolve(Settings.canDrawOverlays(reactContext));
+      promise.resolve(hasPermission());
     } catch (Exception e) {
       promise.reject("");
     }
@@ -111,6 +112,13 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
     bubblesManager.addBubble(bubbleView, x, y);
   }
 
+  private boolean hasPermission(){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      return Settings.canDrawOverlays(reactContext);
+    }
+    return true;
+  }
+
   private void removeBubble() {
     if(bubbleView != null){
       try{
@@ -123,12 +131,12 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
 
 
   public void requestPermissionAction(final Promise promise) {
-    if (!Settings.canDrawOverlays(reactContext)) {
+    if (!hasPermission()) {
       Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + reactContext.getPackageName()));
       Bundle bundle = new Bundle();
       reactContext.startActivityForResult(intent, 0, bundle);
     } 
-    if (Settings.canDrawOverlays(reactContext)) {
+    if (hasPermission()) {
       promise.resolve("");
     } else {
       promise.reject("");
