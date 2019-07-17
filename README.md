@@ -93,3 +93,9 @@ Events: `floating-bubble-press`, `floating-bubble-remove`
 
  If you want to contribute the source code is here.
   https://github.com/hybriteq/react-native-floating-bubble
+
+### Publish commands
+```sh
+npm publish --tag react-native-floating-bubble@version
+npm dist-tag add react-native-floating-bubble@version latest
+```
