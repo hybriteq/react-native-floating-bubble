@@ -2,6 +2,7 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 
     dependencies {
@@ -28,10 +29,18 @@ android {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
 }
 
 dependencies {
     compile 'com.facebook.react:react-native:+'
-    compile 'com.txusballesteros:bubbles:1.2.1'
+    //compile 'com.txusballesteros:bubbles:1.2.1',
+    implementation 'com.github.txusballesteros:bubbles-for-android:develop-SNAPSHOT'
 }
   
