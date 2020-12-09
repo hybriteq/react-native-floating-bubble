@@ -39,6 +39,14 @@ public class RNFloatingBubbleModule extends ReactContextBaseJavaModule {
     // }
   }
 
+  @ReactMethod
+  public void reopenApp(){
+    Intent launchIntent = reactContext.getPackageManager().getLaunchIntentForPackage(reactContext.getPackageName());
+    if (launchIntent != null) {
+      reactContext.startActivity(launchIntent);
+    }
+  }
+
   @Override
   public String getName() {
     return "RNFloatingBubble";
